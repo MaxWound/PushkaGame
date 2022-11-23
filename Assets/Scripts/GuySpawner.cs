@@ -34,7 +34,7 @@ public class GuySpawner : MonoBehaviour
         {
             timerTime = 0;
             print("spawn");
-            SpawnGuy(new Vector3(Random.Range(leftBound.position.x,leftBound.position.y),-1f,rightBound.position.z));
+            SpawnGuy(new Vector3(Random.Range(rightBound.position.x,leftBound.position.y + 10),-1f,leftBound.position.z));
             
             delay = Random.Range(minDelay, maxDelay);
         }

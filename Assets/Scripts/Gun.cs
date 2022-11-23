@@ -5,37 +5,38 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     [SerializeField]
+    Joystick joystick;
+    [SerializeField]
     Transform MainGun;
     Transform position => transform;
     [SerializeField]
     Transform direction;
     [SerializeField]
     float power;
-    private float mouseX => Input.mousePosition.x;
-    private float mouseY => Input.mousePosition.y;
+    private float mouseX => joystick.Horizontal;
+    private float mouseY => joystick.Vertical;
     [SerializeField]
     private float GunSpeed;
-    private Vector3 mouseCurrent => new Vector3(0f, mouseX, mouseY);
+
     private Vector3 mouseStart;
     private Vector3 mouseDelta;
     private void Update()
     {
 
-        if (Input.GetMouseButtonDown(0))
-            {
-            
-            mouseStart = mouseCurrent;
-            }
-        if(Input.GetMouseButton(0))
+        RotLogic();
+
+    }
+    private void RotLogic()
+    {
+        Vector3 RotVector = new Vector3(0f, mouseX, mouseY) * Time.deltaTime * GunSpeed;
+
+        if (joystick.Vertical != 0 && joystick.Horizontal != 0 || joystick.Vertical != 0 || joystick.Horizontal != 0)
         {
-            mouseDelta = (mouseCurrent - mouseStart) * Time.deltaTime * GunSpeed;
-            mouseStart = mouseCurrent;
-            
-            MainGun.rotation = Quaternion.Euler( MainGun.rotation.eulerAngles + Quaternion.Euler(mouseDelta).eulerAngles) ;
-            //print(MainGun.rotation.eulerAngles.z);
+            MainGun.rotation = Quaternion.Euler(MainGun.rotation.eulerAngles + Quaternion.Euler(RotVector).eulerAngles);
+
             MainGun.rotation = Quaternion.Euler(0f, Mathf.Clamp(MainGun.rotation.eulerAngles.y, 30, 150), Mathf.Clamp(MainGun.rotation.eulerAngles.z, 240, 320));
         }
-        
+
     }
     public void Shoot()
     {
